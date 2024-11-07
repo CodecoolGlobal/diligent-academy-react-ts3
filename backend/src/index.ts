@@ -41,6 +41,20 @@ app.get('/posts/:id', (req: Request, res: Response) => {
   res.json(post || {});
 });
 
+app.get('/users/:id', (req: Request, res: Response) => {
+  const user = users.find(user => user.id === parseInt(req.params.id));
+  res.json(user || {});
+});
+
+app.post('/users', (req: Request, res: Response) => {
+  const newUser: User = {
+    id: users.length + 1,
+    ...req.body,
+  };
+  users.push(newUser);
+  res.json(newUser);
+});
+
 app.post('/posts', (req: Request, res: Response) => {
   const newPost: Post = {
     id: posts.length + 1,
@@ -48,6 +62,56 @@ app.post('/posts', (req: Request, res: Response) => {
   };
   posts.push(newPost);
   res.json(newPost);
+});
+
+app.put('/users/:id', (req: Request, res: Response) => {
+  const userId = parseInt(req.params.id);
+  const updatedUser: Partial<User> = req.body;
+
+  const userIndex = users.findIndex(user => user.id === userId);
+
+  users[userIndex] = {
+    ...users[userIndex],
+    ...updatedUser
+
+  };
+
+  res.json(users[userIndex]);
+});
+
+app.put('/posts/:id', (req: Request, res: Response) => {
+  const postId = parseInt(req.params.id);
+  const updatedPost: Partial<Post> = req.body;
+
+  const postIndex = posts.findIndex(post => post.id === postId);
+
+  posts[postIndex] = {
+    ...posts[postIndex],
+    ...updatedPost
+
+  };
+
+  res.json(posts[postIndex]);
+});
+
+app.delete('/users/:id', (req: Request, res: Response) => {
+  const userId = parseInt(req.params.id);
+  const userIndex = users.findIndex(user => user.id === userId);
+
+  users.splice(userIndex, 1);
+
+  res.sendStatus(204);   
+
+});
+
+app.delete('/posts/:id', (req: Request, res: Response) => {
+  const postId = parseInt(req.params.id);
+  const postIndex = posts.findIndex(post => post.id === postId);
+
+  users.splice(postIndex, 1);
+
+  res.sendStatus(204);   
+
 });
 
 app.listen(port, () => {
