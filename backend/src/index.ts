@@ -5,6 +5,7 @@ const app: Express = express();
 const port = 3000;
 
 app.use(cors());
+app.use(express.json());
 
 interface User {
   id: number;
